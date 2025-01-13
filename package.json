@@ -1,0 +1,17 @@
+{
+  "name": "goalbloom",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "compile:sass": "sass --watch ./scss/custom.scss ./assets/css/styles.css"
+  },
+  "author": "Dyara Williams",
+  "license": "MIT",
+  "description": "A web project using HTML, CSS (Bootstrap with Sass), and JavaScript.",
+  "dependencies": {
+    "bootstrap": "^5.3.3"
+  },
+  "devDependencies": {
+    "sass": "^1.83.1"
+  }
+}
