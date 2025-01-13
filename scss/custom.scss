@@ -1,0 +1,178 @@
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+$primary: #32CD32;
+$background-color: #ededed;
+$body-color: #000000;
+
+/*******************
+ *     Layout      *
+ *******************/
+body {
+    background-color: $background-color;
+    color: $body-color;
+    padding-bottom: 4rem; // Add padding to the bottom to accommodate the fixed footer
+}
+
+/*****************
+*   Typography  *
+*****************/
+.navbar-brand {
+    font-family: "Playfair Display", serif;
+    font-weight: 900;
+}
+
+h1 {
+    font-family: "Montserrat", serif;
+    font-weight: 700;
+    letter-spacing: 4px;
+    font-size: 2rem;
+
+    @include media-breakpoint-up(sm){
+        font-size: 2.5rem; 
+    }
+
+    @include media-breakpoint-up(md) {
+        font-size: 2.7rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+        font-size: 3rem;
+    }
+}
+
+h2 {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 2rem;
+
+    @include media-breakpoint-up(md) {
+        font-size: 2.5rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+        font-size: 3rem;
+    }
+}
+
+p {
+    font-family: "Raleway", serif;
+    font-weight: 600;
+    font-size: 1rem;
+
+    @include media-breakpoint-up(md) {
+        font-size: 1.25rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+        font-size: 1.5rem;
+    }
+}
+
+.nav-link {
+    font-family: "Montserrat", serif;
+    font-weight: 600;
+    font-size: 1rem;
+
+    @include media-breakpoint-up(md) {
+        font-size: 1.25rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+        font-size: 1.5rem;
+    }
+}
+
+/*****************
+ *    Navbar    *
+ *****************/
+.navbar {
+    background-color: $primary !important;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid $body-color;
+
+    .nav-link:hover {
+        border-color: $body-color;
+    }
+}
+
+/*****************
+ * index.html    *
+ *****************/
+.box {
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+        width: 50%;
+    }
+}
+
+.box-1 {
+    padding: 2.5rem 2rem;
+    background-color: $primary;
+    color: $body-color;
+
+    @include media-breakpoint-up(md) {
+        padding: 3rem 2.5rem;
+    }
+}
+
+.box-2 {
+    padding: 1rem;
+}
+
+/*******************
+ * Kanban Board    *
+ *******************/
+ .kanban-board {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.kanban-column {
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: lighten($primary, 40%);
+    padding: 10px;
+    border-radius: 5px;
+
+    @include media-breakpoint-up(sm) {
+        width: 48%;
+    }
+
+    @include media-breakpoint-up(md) {
+        width: 30%;
+    }
+}
+
+.kanban-card {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+}
+
+.kanban-card.dragging {
+    opacity: 0.5;
+}
+
+.kanban-column.drag-over {
+    border: 2px dashed #ccc;
+}
+
+/*******************
+ *     Footer      *
+*******************/
+footer {
+    background-color: $primary;
+    color: $body-color;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
