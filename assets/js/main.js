@@ -111,7 +111,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return taskElement;
     }
 
+    let touchDragging = null;
+    let initialY = 0;
+    let currentColumn = null;
+
     function addDragAndDropListeners(taskElement) {
+        // Existing desktop drag/drop
         taskElement.addEventListener('dragstart', () => {
             taskElement.classList.add('dragging');
         });
@@ -119,6 +124,85 @@ document.addEventListener('DOMContentLoaded', function() {
             taskElement.classList.remove('dragging');
             saveTasks();
         });
+
+        // Mobile touch events
+        taskElement.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            initialY = touch.clientY;
+            touchDragging = taskElement;
+            currentColumn = taskElement.closest('.kanban-column');
+            
+            // Add visual feedback
+            taskElement.style.opacity = '0.8';
+            taskElement.style.transform = 'scale(1.05)';
+            taskElement.style.transition = 'transform 0.2s ease';
+
+            // Prevent scrolling while dragging
+            e.preventDefault();
+        });
+
+        taskElement.addEventListener('touchmove', (e) => {
+            if (!touchDragging) return;
+            
+            const touch = e.touches[0];
+            const columns = document.querySelectorAll('.kanban-column');
+            
+            // Find column under touch point
+            const elementsUnderTouch = document.elementsFromPoint(touch.clientX, touch.clientY);
+            const columnUnderTouch = elementsUnderTouch.find(el => el.classList.contains('kanban-column'));
+            
+            if (columnUnderTouch) {
+                if (currentColumn !== columnUnderTouch) {
+                    currentColumn.classList.remove('drag-over');
+                    columnUnderTouch.classList.add('drag-over');
+                    currentColumn = columnUnderTouch;
+                }
+
+                const afterElement = getDragAfterElement(columnUnderTouch, touch.clientY);
+                if (afterElement == null) {
+                    columnUnderTouch.appendChild(touchDragging);
+                } else {
+                    columnUnderTouch.insertBefore(touchDragging, afterElement);
+                }
+            }
+
+            e.preventDefault();
+        });
+
+        taskElement.addEventListener('touchend', () => {
+            if (!touchDragging) return;
+            
+            // Remove visual feedback
+            touchDragging.style.opacity = '';
+            touchDragging.style.transform = '';
+            touchDragging.style.transition = '';
+            
+            // Clean up
+            if (currentColumn) {
+                currentColumn.classList.remove('drag-over');
+            }
+            touchDragging = null;
+            currentColumn = null;
+            saveTasks();
+        });
+
+        taskElement.addEventListener('touchcancel', () => {
+            if (!touchDragging) return;
+            
+            // Reset visual state
+            touchDragging.style.opacity = '';
+            touchDragging.style.transform = '';
+            touchDragging.style.transition = '';
+            
+            // Clean up
+            if (currentColumn) {
+                currentColumn.classList.remove('drag-over');
+            }
+            touchDragging = null;
+            currentColumn = null;
+        });
+
+        // Existing double-click and long press handlers
         taskElement.addEventListener('dblclick', () => {
             editTask(taskElement);
         });
@@ -134,6 +218,19 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(pressTimer);
         });
     }
+
+    // Add touch-specific styles to prevent scrolling during drag
+    const style = document.createElement('style');
+    style.textContent = `
+        .kanban-card.dragging {
+            touch-action: none;
+            user-select: none;
+        }
+        .drag-over {
+            background-color: rgba(0,0,0,0.1);
+        }
+    `;
+    document.head.appendChild(style);
 
     function editTask(taskElement) {
         try {
